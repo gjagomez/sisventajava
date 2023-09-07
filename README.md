@@ -3,10 +3,6 @@
 
 Este sistema incluye una serie de procesos, herramientas, estrategias y tecnologías diseñadas para maximizar las ventas de productos o servicios de la empresa, esta demo usa lector de codigo de barra para la salida de productos
 
-
-
-![App Screenshot](https://www.elplural.com/uploads/s1/11/32/43/0/los-mejores-lectores-de-codigos-de-barras.jpeg)
-
 ## Captura de pantalla
 
 
