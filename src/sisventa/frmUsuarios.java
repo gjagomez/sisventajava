@@ -1,5 +1,5 @@
-
 package sisventa;
+
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -16,11 +16,36 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import logicanegocio.Usuarios;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.awt.Desktop;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import logicanegocio.usdb;
+
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfWriter;
+
+import java.io.FileOutputStream;
+import java.util.List;
+
 public class frmUsuarios extends javax.swing.JFrame {
-    private String imageUrl; 
+
+    private String imageUrl;
+
     public frmUsuarios() {
         initComponents();
-         nuevo();
+        nuevo();
     }
 
     @SuppressWarnings("unchecked")
@@ -88,6 +113,11 @@ public class frmUsuarios extends javax.swing.JFrame {
         btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/trash-xmark.png"))); // NOI18N
         btnEliminar.setText("Eliminar");
         btnEliminar.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
 
         txtEmail.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
         txtEmail.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -227,34 +257,32 @@ public class frmUsuarios extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-                Usuarios SaveUser=new Usuarios();
-                String email = txtEmail.getText();
-                String clave = txtPassword.getText();
-                String nombre = txtNombre.getText();
-                String direccion = txtDireccion.getText();
-                String tel = txtTelefono.getText();
-                String rolid = "1";
-                
-                
-                
-                 if (txtNombre.getText().isEmpty() || this.txtEmail.getText().isEmpty() || this.txtPassword.getText().isEmpty()|| this.txtDireccion.getText().isEmpty() || this.txtTelefono.getText().isEmpty()) {
-                    JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos", "Error", JOptionPane.ERROR_MESSAGE);
-                    this.txtNombre.requestFocus();
-                    } else{
-                     boolean insertExitoso = SaveUser.saveUser(email, clave, nombre, direccion, tel, rolid);
+        Usuarios SaveUser = new Usuarios();
+        String email = txtEmail.getText();
+        String clave = txtPassword.getText();
+        String nombre = txtNombre.getText();
+        String direccion = txtDireccion.getText();
+        String tel = txtTelefono.getText();
+        String rolid = "1";
 
-                    if (insertExitoso) {
-                        JOptionPane.showMessageDialog(this, "Usuario guardado exitosamente");
-                        this.dispose();
-                    } else {
-                        JOptionPane.showMessageDialog(this, "Error al guardar el usuario", "Error", JOptionPane.ERROR_MESSAGE);
-                    }
-                 }
-                
-                
+        if (txtNombre.getText().isEmpty() || this.txtEmail.getText().isEmpty() || this.txtPassword.getText().isEmpty() || this.txtDireccion.getText().isEmpty() || this.txtTelefono.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos", "Error", JOptionPane.ERROR_MESSAGE);
+            this.txtNombre.requestFocus();
+        } else {
+            boolean insertExitoso = SaveUser.saveUser(email, clave, nombre, direccion, tel, rolid);
 
-                
+            if (insertExitoso) {
+                JOptionPane.showMessageDialog(this, "Usuario guardado exitosamente");
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "Error al guardar el usuario", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
+
     }//GEN-LAST:event_btnGuardarActionPerformed
+
+   
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
         // TODO add your handling code here:
@@ -262,7 +290,7 @@ public class frmUsuarios extends javax.swing.JFrame {
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void txtEmailFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtEmailFocusLost
-       Usuarios validator = new Usuarios();
+        Usuarios validator = new Usuarios();
         String correo = this.txtEmail.getText();
 
         if (validator.correoExiste(correo)) {
@@ -276,64 +304,66 @@ public class frmUsuarios extends javax.swing.JFrame {
 
     private void imageAvatar2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_imageAvatar2MouseClicked
         // TODO add your handling code here:
-          JFileChooser fileChooser = new JFileChooser();
-                int returnValue = fileChooser.showOpenDialog(null);
+        JFileChooser fileChooser = new JFileChooser();
+        int returnValue = fileChooser.showOpenDialog(null);
 
-                if (returnValue == JFileChooser.APPROVE_OPTION) {
-                    File selectedFile = fileChooser.getSelectedFile();
-                    ImageIcon imageIcon = new ImageIcon(selectedFile.getAbsolutePath());
-                    imageAvatar2.setImage(imageIcon);
-                    
-                     ImageIcon icon = new ImageIcon(selectedFile.getAbsolutePath()); 
-                     
-                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
-                     String fileName = "imagen_" + dateFormat.format(new Date()) + ".jpg";
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            ImageIcon imageIcon = new ImageIcon(selectedFile.getAbsolutePath());
+            imageAvatar2.setImage(imageIcon);
 
-                     
-                     
-                     saveImageToFile(icon.getImage(), "images", fileName);
+            ImageIcon icon = new ImageIcon(selectedFile.getAbsolutePath());
 
-                }
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
+            String fileName = "imagen_" + dateFormat.format(new Date()) + ".jpg";
+
+            saveImageToFile(icon.getImage(), "images", fileName);
+        }
     }//GEN-LAST:event_imageAvatar2MouseClicked
 
-    private void nuevo(){
-      this.txtDireccion.setText("");
-      this.txtNombre.setText("");
-      this.txtPassword.setText("");
-      this.txtTelefono.setText("");
-      this.txtNombre.requestFocus();
-      this.txtEmail.setText("");
-      this.lbAviso.setText("");
-      this.btnGuardar.setEnabled(true);
-    }
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        // TODO add your handling code here:
     
-    private static void saveImageToFile(Image image, String folderName, String fileName) {
-    try {
-        // Crear la carpeta si no existe
-        File folder = new File(folderName);
-        if (!folder.exists()) {
-            folder.mkdirs();
-        }
+    }//GEN-LAST:event_btnEliminarActionPerformed
 
-        // Convertir Image a BufferedImage
-        BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_RGB);
-        Graphics2D g2 = bufferedImage.createGraphics();
-        g2.drawImage(image, 0, 0, null);
-        g2.dispose();
-
-        // Ruta completa al archivo de destino
-        Path destinationPath = folder.toPath().resolve(fileName);
-        
-        // Guardar la imagen usando ImageIO y copiar al destino
-        ImageIO.write(bufferedImage, "jpg", destinationPath.toFile());
-        //imageUrl=destinationPath.toString();
-     
-        System.out.println("Imagen guardada en: " + destinationPath);
-    } catch (IOException e) {
-        e.printStackTrace();
+    private void nuevo() {
+        this.txtDireccion.setText("");
+        this.txtNombre.setText("");
+        this.txtPassword.setText("");
+        this.txtTelefono.setText("");
+        this.txtNombre.requestFocus();
+        this.txtEmail.setText("");
+        this.lbAviso.setText("");
+        this.btnGuardar.setEnabled(true);
     }
-}
-   
+
+    private static void saveImageToFile(Image image, String folderName, String fileName) {
+        try {
+            // Crear la carpeta si no existe
+            File folder = new File(folderName);
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+
+            // Convertir Image a BufferedImage
+            BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_RGB);
+            Graphics2D g2 = bufferedImage.createGraphics();
+            g2.drawImage(image, 0, 0, null);
+            g2.dispose();
+
+            // Ruta completa al archivo de destino
+            Path destinationPath = folder.toPath().resolve(fileName);
+
+            // Guardar la imagen usando ImageIO y copiar al destino
+            ImageIO.write(bufferedImage, "jpg", destinationPath.toFile());
+            //imageUrl=destinationPath.toString();
+
+            System.out.println("Imagen guardada en: " + destinationPath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * @param args the command line arguments
      */

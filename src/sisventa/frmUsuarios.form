@@ -265,6 +265,9 @@
               <Font name="Helvetica Neue" size="14" style="1"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEliminarActionPerformed"/>
+          </Events>
         </Component>
         <Component class="textfield2.TextField" name="txtEmail">
           <Properties>

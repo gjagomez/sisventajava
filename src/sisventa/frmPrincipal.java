@@ -4,9 +4,23 @@
  */
 package sisventa;
 
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import java.awt.Component;
+import java.awt.Desktop;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 import javaswingdev.menu.EventMenuSelected;
 import javax.swing.JFrame;
@@ -14,7 +28,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import logicanegocio.Productos;
+import logicanegocio.Usuarios;
 import logicanegocio.prodInterfaz;
+import logicanegocio.usdb;
 import sisventa.frmUsuarios;
 
 public class frmPrincipal extends javax.swing.JFrame {
@@ -145,6 +161,10 @@ public class frmPrincipal extends javax.swing.JFrame {
                 frmProductos frmProd = new frmProductos();
                 frmProd.setVisible(true);
                 break;
+            case 31:
+               frmReporte rep=new frmReporte();
+               rep.setVisible(true);
+                break;
             case 71:
                 frmListUsuarios frmList = new frmListUsuarios();
                 frmList.setVisible(true);
@@ -159,7 +179,34 @@ public class frmPrincipal extends javax.swing.JFrame {
         }
 
     }
-
+    
+    
+  
+    void loadPdf(String archivo){
+     try {
+            // Ruta al archivo PDF que deseas abrir
+            String pdfFilePath = archivo; // Reemplaza con la ruta correcta
+            
+            // Verifica si el soporte de escritorio está disponible en el sistema
+            if (Desktop.isDesktopSupported()) {
+                Desktop desktop = Desktop.getDesktop();
+                
+                // Verifica si el archivo PDF existe
+                File pdfFile = new File(pdfFilePath);
+                if (pdfFile.exists()) {
+                    // Abre el archivo PDF con la aplicación predeterminada
+                    desktop.open(pdfFile);
+                } else {
+                    System.out.println("El archivo PDF no existe en la ubicación especificada.");
+                }
+            } else {
+                System.out.println("El soporte de escritorio no está disponible en este sistema.");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -221,6 +268,11 @@ public class frmPrincipal extends javax.swing.JFrame {
         button3.setForeground(new java.awt.Color(255, 255, 255));
         button3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/money-check (1).png"))); // NOI18N
         button3.setText("COBRAR [ F-2 ]");
+        button3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -306,6 +358,14 @@ public class frmPrincipal extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void button3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button3ActionPerformed
+        // TODO add your handling code here:
+        String TotalG=this.txtGranTotal.getText();
+       
+        frmCobro cobrosForm = new frmCobro();
+        cobrosForm.setVisible(true);
+    }//GEN-LAST:event_button3ActionPerformed
 
     /**
      * @param args the command line arguments

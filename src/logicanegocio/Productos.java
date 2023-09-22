@@ -22,7 +22,7 @@ public class Productos {
     public boolean saveProd(String codbarra, String producto, String precio, String existencia, String linea) {
         try {
             Connection con = DriverManager.getConnection(url, usuarioDB, contraseñaDB);
-            String query = "INSERT INTO PRODUCTOS (CODBARRA, PRODUCTO, PRECIO, EXISTENCIA, LINEA)VALUES(?,?,?,?,?)";
+                String query = "INSERT INTO PRODUCTOS (CODBARRA, PRODUCTO, PRECIO, EXISTENCIA, LINEA)VALUES(?,?,?,?,?)";
             PreparedStatement pst = con.prepareStatement(query);
             pst.setString(1, codbarra);
             pst.setString(2, producto);

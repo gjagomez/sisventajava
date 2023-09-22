@@ -37,11 +37,11 @@ public class Menu extends JPanel {
         addMenuItem(new ModelMenuItem(GoogleMaterialDesignIcon.REPORT, "Facturacion"));
         addTitle("PRODUCTOS");
         addMenuItem(new ModelMenuItem(GoogleMaterialDesignIcon.MAIL_OUTLINE, "Producto", "Ingresos"));
-        addMenuItem(new ModelMenuItem(GoogleMaterialDesignIcon.MESSAGE, "Existencias"));
-        addMenuItem(new ModelMenuItem(GoogleMaterialDesignIcon.PERM_CONTACT_CALENDAR, "Pedidos"));
+       
+      
         addTitle("REPORTES");
-        addMenuItem(new ModelMenuItem(GoogleMaterialDesignIcon.WHATSHOT, "Productos", "Existencia minima", "Kardex"));
-        addMenuItem(new ModelMenuItem(GoogleMaterialDesignIcon.DIRECTIONS_BIKE, "Ventas", "Diarias", "Por usuario"));
+        addMenuItem(new ModelMenuItem(GoogleMaterialDesignIcon.WHATSHOT, "Productos", "Existencia minima"));
+      
         addTitle("USUARIOS");
         addMenuItem(new ModelMenuItem(GoogleMaterialDesignIcon.LOCK_OUTLINE, "Authentication", "Usuarios", "Agregar"));
     }
