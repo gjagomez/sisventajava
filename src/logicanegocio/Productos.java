@@ -39,6 +39,39 @@ public class Productos {
         }
     }
 
+    public boolean saveVenta(String codbarra, int cantidad, double codcli,String code) {
+    try {
+        Connection con = DriverManager.getConnection(url, usuarioDB, contraseñaDB);
+        con.setAutoCommit(false); 
+        String query = "INSERT INTO VENTAS.VENTA (CODBARRA, CANTIDAD, TOTAL, FECHA,IDFACTURA) VALUES (?, ?, ?, CURDATE(),?)";
+        PreparedStatement pst = con.prepareStatement(query);
+        pst.setString(1, codbarra);
+        pst.setInt(2, cantidad);
+        pst.setDouble(3, codcli);
+        pst.setString(4, code);
+
+        
+         int filasVentaAfectadas = pst.executeUpdate();
+
+        // Actualizamos la tabla de productos restando la cantidad vendida
+        String productoQuery = "UPDATE PRODUCTOS SET EXISTENCIA = EXISTENCIA - ? WHERE CODBARRA = ?";
+        PreparedStatement pstProducto = con.prepareStatement(productoQuery);
+        pstProducto.setInt(1, cantidad);
+        pstProducto.setString(2, codbarra);
+
+        int filasProductoAfectadas = pstProducto.executeUpdate();
+
+        // Realizamos la confirmación de la transacción
+        con.commit();
+        con.close();
+        
+       return filasVentaAfectadas > 0 && filasProductoAfectadas > 0;
+    } catch (Exception e) {
+        e.printStackTrace();
+        return false;
+    }
+}
+
     public boolean updateProd(String codbarra, String producto, String precio, String existencia, String linea) {
         try {
             Connection con = DriverManager.getConnection(url, usuarioDB, contraseñaDB);

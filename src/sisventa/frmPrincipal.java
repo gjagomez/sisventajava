@@ -4,24 +4,14 @@
  */
 package sisventa;
 
-import com.itextpdf.text.BaseColor;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.Element;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.FontFactory;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.Phrase;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
-import java.awt.Component;
+
 import java.awt.Desktop;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 import javaswingdev.menu.EventMenuSelected;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -34,6 +24,9 @@ import logicanegocio.usdb;
 import sisventa.frmUsuarios;
 
 public class frmPrincipal extends javax.swing.JFrame {
+
+
+    
 
     private JTable jTableProductos;
 
@@ -165,13 +158,16 @@ public class frmPrincipal extends javax.swing.JFrame {
                frmReporte rep=new frmReporte();
                rep.setVisible(true);
                 break;
-            case 71:
+            case 41:
                 frmListUsuarios frmList = new frmListUsuarios();
                 frmList.setVisible(true);
                 break;
-            case 72:
+            case 42:
                 frmUsuarios frmUs = new frmUsuarios();
                 frmUs.setVisible(true);
+                break;
+             case 50:
+                abrirPDFEnPantalla("help.pdf");
                 break;
             default:
                 System.out.println("Opción no válida");
@@ -180,7 +176,17 @@ public class frmPrincipal extends javax.swing.JFrame {
 
     }
     
-    
+    public static void abrirPDFEnPantalla(String rutaArchivoPDF) {
+        try {
+            File archivoPDF = new File(rutaArchivoPDF);
+
+            if (archivoPDF.exists() && Desktop.isDesktopSupported()) {
+                Desktop.getDesktop().open(archivoPDF);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
   
     void loadPdf(String archivo){
      try {
@@ -211,6 +217,7 @@ public class frmPrincipal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jFrame1 = new javax.swing.JFrame();
         menu1 = new javaswingdev.menu.Menu();
         jPanel1 = new javax.swing.JPanel();
         card2 = new javaswingdev.card.Card();
@@ -223,6 +230,17 @@ public class frmPrincipal extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         button2 = new Button.Button();
         button3 = new Button.Button();
+
+        javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
+        jFrame1.getContentPane().setLayout(jFrame1Layout);
+        jFrame1Layout.setHorizontalGroup(
+            jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        jFrame1Layout.setVerticalGroup(
+            jFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -361,15 +379,37 @@ public class frmPrincipal extends javax.swing.JFrame {
 
     private void button3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button3ActionPerformed
         // TODO add your handling code here:
-        String TotalG=this.txtGranTotal.getText();
        
-        frmCobro cobrosForm = new frmCobro();
-        cobrosForm.setVisible(true);
+        GuardarFactura();
     }//GEN-LAST:event_button3ActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
+  void GuardarFactura(){
+       DefaultTableModel model = (DefaultTableModel) table1.getModel();
+        // Recorrer y mostrar los datos de la tabla
+        int rowCount = model.getRowCount();
+        String code=generateUniqueCode();
+         System.out.println("Código único generado: " + code);
+        for (int row = 0; row < rowCount; row++) {
+            String codigobarra = model.getValueAt(row, 0).toString();
+            double total = Double.parseDouble(model.getValueAt(row, 4).toString());
+            int cantidad = Integer.parseInt(model.getValueAt(row, 3).toString());
+
+            Productos prod=new Productos();
+            prod.saveVenta(codigobarra, cantidad,total,code);
+            // Realizar acciones con los valores obtenidos
+           
+        }
+        
+         double TotalG=Double.parseDouble(this.txtGranTotal.getText());
+        frmCobro cobrosForm = new frmCobro();
+        cobrosForm.setTotal(TotalG);
+        cobrosForm.setVisible(true);
+  }
+  
+public String generateUniqueCode() {
+    UUID uuid = UUID.randomUUID();
+    return uuid.toString();
+}
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -408,6 +448,7 @@ public class frmPrincipal extends javax.swing.JFrame {
     private Button.Button button3;
     private javaswingdev.card.Card card2;
     private javaswingdev.avatar.ImageAvatar imageAvatar1;
+    private javax.swing.JFrame jFrame1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;

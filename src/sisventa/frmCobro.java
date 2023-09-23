@@ -4,6 +4,11 @@
  */
 package sisventa;
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author jagomez
@@ -14,10 +19,14 @@ public class frmCobro extends javax.swing.JFrame {
      * Creates new form frmCobro
      */
     public frmCobro() {
+        
         initComponents();
+
     }
 
-   
+    public void setTotal(double total) {
+        txtTotalFac.setText(String.valueOf(total));
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -29,10 +38,10 @@ public class frmCobro extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         btnCobrar = new Button.Button();
-        textField1 = new textfield2.TextField();
-        textField2 = new textfield2.TextField();
+        txtDevolucion = new textfield2.TextField();
+        txtTotalFac = new textfield2.TextField();
         jLabel1 = new javax.swing.JLabel();
-        textField3 = new textfield2.TextField();
+        txtEfectivo = new textfield2.TextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
 
@@ -40,10 +49,39 @@ public class frmCobro extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
+        btnCobrar.setBackground(new java.awt.Color(0, 102, 204));
+        btnCobrar.setForeground(new java.awt.Color(255, 255, 255));
         btnCobrar.setText("Cobrar");
+        btnCobrar.setFont(new java.awt.Font("Helvetica Neue", 0, 14)); // NOI18N
         btnCobrar.setShadowColor(new java.awt.Color(0, 102, 255));
+        btnCobrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCobrarActionPerformed(evt);
+            }
+        });
+
+        txtDevolucion.setEnabled(false);
+        txtDevolucion.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
+        txtDevolucion.setShadowColor(new java.awt.Color(255, 51, 51));
+
+        txtTotalFac.setEnabled(false);
+        txtTotalFac.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
+        txtTotalFac.setShadowColor(new java.awt.Color(0, 102, 204));
 
         jLabel1.setText("TOTAL");
+
+        txtEfectivo.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
+        txtEfectivo.setShadowColor(new java.awt.Color(0, 51, 153));
+        txtEfectivo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtEfectivoActionPerformed(evt);
+            }
+        });
+        txtEfectivo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtEfectivoKeyPressed(evt);
+            }
+        });
 
         jLabel2.setText("EFECTIVO");
 
@@ -73,9 +111,9 @@ public class frmCobro extends javax.swing.JFrame {
                         .addGap(6, 6, 6)
                         .addComponent(jLabel3))
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(textField2, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(textField1, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(textField3, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(txtTotalFac, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtDevolucion, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtEfectivo, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(231, 231, 231))
         );
         jPanel1Layout.setVerticalGroup(
@@ -84,15 +122,15 @@ public class frmCobro extends javax.swing.JFrame {
                 .addGap(43, 43, 43)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(textField2, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtTotalFac, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(textField3, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtEfectivo, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(textField1, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtDevolucion, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnCobrar, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -114,6 +152,37 @@ public class frmCobro extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void txtEfectivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEfectivoActionPerformed
+    }//GEN-LAST:event_txtEfectivoActionPerformed
+
+    private void txtEfectivoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEfectivoKeyPressed
+      btnCalcularDevolucionActionPerformed();        // TODO add your handling code here:
+    }//GEN-LAST:event_txtEfectivoKeyPressed
+
+    private void btnCobrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCobrarActionPerformed
+   this.dispose();
+
+    }//GEN-LAST:event_btnCobrarActionPerformed
+
+    private void btnCalcularDevolucionActionPerformed() {
+    try {
+        // Obtén los valores de los JTextField
+        double total = Double.parseDouble(this.txtTotalFac.getText());
+        double efectivo = Double.parseDouble(this.txtEfectivo.getText());
+
+        // Calcula la devolución
+        double devolucion = efectivo - total;
+
+        // Muestra el resultado en el JTextField de devolución
+        txtDevolucion.setText(String.valueOf(devolucion));
+    } catch (NumberFormatException e) {
+        // Maneja la excepción si los valores ingresados no son números válidos
+        txtDevolucion.setText("Error");
+    }
+}
+
+
 
     /**
      * @param args the command line arguments
@@ -146,7 +215,6 @@ public class frmCobro extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new frmCobro().setVisible(true);
-                 
             }
         });
     }
@@ -157,8 +225,8 @@ public class frmCobro extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
-    private textfield2.TextField textField1;
-    private textfield2.TextField textField2;
-    private textfield2.TextField textField3;
+    private textfield2.TextField txtDevolucion;
+    private textfield2.TextField txtEfectivo;
+    private textfield2.TextField txtTotalFac;
     // End of variables declaration//GEN-END:variables
 }
